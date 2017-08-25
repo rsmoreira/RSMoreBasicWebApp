@@ -1,0 +1,79 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:component-scan base-package="com.rsmore.core.repositories.jpa" />
+
+	<!-- 
+		Here is our H2 Database Engine mapping  
+		Where we can set the connection and defines the URL and driver.
+		 
+		Take a look on H2 documentation (Chase Sheet), there are a lot of URLs to 
+		defines our database behavior. 
+		
+		jdbc:h2:mem:test - (In-Memory - multiple connections in one process)
+		
+	-->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="username" value="sa"/>
+		<property name="password" value="sa"/>
+		<property name="url" value="jdbc:h2:mem:test"/>
+		<property name="driverClassName" value="org.h2.Driver"/>
+	</bean>
+	
+	<!-- 
+		Here is our Entity Manager Factory mapping.
+		
+		We are using LocalContainerEntityManagerFactoryBean, strongly recommended to 
+		use with Spring4.
+		
+		dataSource 		 - In this property we set the data source that the entity manager will use
+						 - Here we are using the data source configured above.
+		
+		jpaVendorAdapter - In this property we need to tell to spring witch type of jpa control we will use
+						 - Take a look that here is the place where we will tell do spring that we will
+						 use Hibernate (HibernateJpaVendorAdapter)!
+		
+		jpaProperties	 - It is a map with a lot of properties that we can use. As well as we are using 
+						 Hibernate, here we need to use properties of Hibernate. 
+						 
+						 - hibernate.hbm2ddl.auto - property used with the value 'create-drop' mostly used 
+						 with In-memory data bases. Create the data base when the app is started, and drop
+						 at the end. 
+						 
+						 - show_sql - 
+		
+		packagesToScan 	 - Property to set where is our entities that will be managed are located. 
+	 -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+		</property>
+		<property name="jpaProperties">
+			<map>
+				<entry key="hibernate.hbm2ddl.auto" value="create-drop"/>
+				<entry key="hibernate.show_sql" value="true"/>		
+			</map>
+		</property>
+		<property name="packagesToScan" value="com.rsmore.core.model.entities"/>
+	</bean>
+
+	<!-- It allows spring to scan for @Transactional annotations -->
+	<tx:annotation-driven/>
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"/>
+	
+	<context:component-scan base-package="com.rsmore.core.services.impl"/>
+</beans>

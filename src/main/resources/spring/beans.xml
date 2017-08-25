@@ -1,0 +1,22 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
+		<property name="environment">
+			<props>
+				<prop key="java.naming.factory.initial">org.apache.openejb.client.RemoteInitialContextFactory</prop>
+				<prop key="java.naming.provider.url">ejbd://localhost:4201</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- bean id="calculatorBean"
+		class="org.springframework.ejb.access.SimpleRemoteStatelessSessionProxyFactoryBean">
+		<property name="jndiName" value="global/RSMoreEJB31App-0.0.1-SNAPSHOT/CalculatorBean!com.rsmore.ejb.remote.stateless.RemoteCalculator" />
+		<property name="jndiTemplate" ref="jndiTemplate" />
+		<property name="businessInterface" value="com.rsmore.ejb.remote.stateless.RemoteCalculator" />
+	</bean-->
+	
+</beans>

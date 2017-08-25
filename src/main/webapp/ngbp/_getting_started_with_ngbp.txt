@@ -1,0 +1,126 @@
+NGBP = NG BOILERPLATE = ENGINE BOILERPLATE = BOILERPLATE JS Structure 
+
+1) Node JS 
+
+	install Nodejs - from https://nodejs.org/
+
+2) Grunt
+	Grunt is a client side tasks config, like ant. 
+	
+	install Grunt Cli - from http://gruntjs.com/getting-started
+	After installed nodejs, run next command from command line as admnistrator: npm install -g grunt-cli
+
+3) Bower
+	Bower is a client side dependencies manager, like maven, but only for js dependencies.
+	
+	install bower - from http://bower.io/
+
+	After installed nodejs, run next command from command line as admnistrator: npm install -g bower
+
+4) GIT
+	Git is a repository manager (used for github management). 
+	
+	install GIT for windows - https://msysgit.github.io/
+
+	This is a wizzard installation. Remember to configure your windows path variable. There is an option 
+	to do this on the wizzard installation.
+
+5) BOILERPLATE (NG Boilerplate)
+	Boilerplate is a client side structure for development.
+	Installation:
+		It isn't an application, it is an structure that you can 'pull'(clone) from github using github
+		commands. 
+		
+		Project on github: https://github.com/ngbp/ngbp
+		
+		To install BOILERPLATE, you can clone the structure into your project webapp folder. Like this:
+			(When I did it at the first time, I did a clone into the app folder. But I had problems to commit it
+			into my github project.)
+			From command line as administrator... 
+			\<your_project>\src\main\webapp> git clone https://github.com/ngbp/ngbp.git app
+			
+			into the your project webapp folder... 
+				GIT CLONE <boilerplate project on github> <name of the folder to create and place boilerplate>
+				
+		You can also download the NG Boilerplate e place into your project (if you want to commit it)
+		When I downloaded it, placed in /ngbp folder. 
+		
+		
+6) Download Boilerplate/Node dependencies
+
+	Take a look on this dependencies on file .../webapp/ngbp/package.json
+	
+	To download, into the app folder (<name of the folder to create and place boilerplate>), executing command line 
+	as administrator:
+		.../webapp/ngbp/npm install
+
+		
+7) Download Bower dependencies
+
+	Take a look on this dependencies on file .../webapp/ngbp/bower.json
+	
+	To download, into the ngbp folder (<name of the folder to create and place boilerplate>), executing command line 
+	as administrator:
+		.../webapp/ngbp/bower install
+		
+8) Adjusts mvc-dispatcher-servlet.xml setting resources 
+
+	You need to fix your MVC Resources tag into the mvc-dispatcher-servlet.xml file, pointing to our ngbp structure.
+		
+	<mvc:resources mapping="/ngbp/**" location="/ngbp/build/" />
+	
+	obs: build folder only appears after your /grunt watch. 
+
+9) GRUNT WATCH
+	
+	This command generate our build folder.
+	
+	.../webapp/ngbp/grunt watch
+	
+	All of our client side development, will be done into /ngbp/src folder. 
+	Grunt Watch will build this developing and place into /ngbp/build folder.
+	
+	obs: Grunt Watch do it simultaneously.
+	
+
+10) Angular-resource 
+
+	Angular-resource is used to client side interact with other resources of your project, like endpoints (json).
+	
+	To install, download the dependencies using bower.
+		
+		.../webapp/ngbp/bower install angular-resource
+	
+		Maybe you will be asked to choose the dependency in a list, if get this question, choice angular-resource (obviously).
+	
+		This install command will download angular-resource to your ../webapp/ngbp/vendor folder, take a look there looking for angular-resource.
+	
+	Configure Angular, to our boilerplate structure use it.
+	
+		Open the file ../webapp/ngbp/build.config.js looking for 'vendor_files', adding the angular resource downloaded.
+			
+			()
+	Problems with angular-resource
+	
+		I got some problems, probably because I was using a newer angular-resource version compared to angular version.
+		So I adjusted the bower.json (../webapp/ngbp/bower.json) to put there the correct version of angular-resource. 
+			obs: 
+				boilerplate are using angular 1.2.28 at this time and when running 'bower install angular-resource', I
+				was downloading angular-resource version 1.4.4. 
+		To solve the problem I adjusted the bower.json, adding the angular-resource dependency:
+			../webapp/ngbp/bower.json
+			{
+			  "name": "ng-boilerplate",
+			  "version": "0.3.2",
+			  "devDependencies": {
+				"angular": "~1.2",
+				"angular-mocks": "~1.2",
+				"bootstrap": "~3.1",
+				"angular-bootstrap": "~0.10.0",
+				"angular-ui-router": "~0.2",
+				"angular-resource": "~1.2" // here is our angular-resource dependency with same version as angular.
+			  },
+			  "dependencies": {}
+			}
+		After it, I've deleted the bower dependencies (on vendor folder) and run again 'bower install'. Take care when
+		deleting the vendor folder. You need to keep there 'placeholders' folder.
